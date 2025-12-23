@@ -248,8 +248,8 @@ ${data.labResults.map(lab => `                                <tr>
                                     <td>${escapeXml(lab.name)}</td>
                                     <td>${escapeXml(lab.value)}</td>
                                     <td>${escapeXml(lab.unit)}</td>
-                                    <td>${lab.rangeLow && lab.rangeHigh ? `${lab.rangeLow} - ${lab.rangeHigh}` : 'N/A'}</td>
-                                    <td>${lab.date}</td>
+                                    <td>${lab.rangeLow && lab.rangeHigh ? `${escapeXml(lab.rangeLow)} - ${escapeXml(lab.rangeHigh)}` : 'N/A'}</td>
+                                    <td>${escapeXml(lab.date)}</td>
                                 </tr>`).join('\n')}
                             </tbody>
                         </table>
