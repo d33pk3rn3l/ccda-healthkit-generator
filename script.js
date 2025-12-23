@@ -25,7 +25,7 @@ function addLabResult() {
     
     labResultDiv.innerHTML = `
         <h3>Lab Result #${labResultCounter}</h3>
-        ${labResultCounter > 1 ? '<button type="button" class="btn btn-danger" onclick="removeLabResult(' + labResultCounter + ')">Remove</button>' : ''}
+        ${labResultCounter > 1 ? '<button type="button" class="btn btn-danger" data-lab-id="' + labResultCounter + '">Remove</button>' : ''}
         <div class="form-row">
             <div class="form-group">
                 <label for="labName${labResultCounter}">Test Name *</label>
@@ -71,6 +71,14 @@ function addLabResult() {
     // Set default test date to today
     container.appendChild(labResultDiv);
     document.getElementById(`labDate${labResultCounter}`).valueAsDate = new Date();
+    
+    // Add event listener for remove button if it exists
+    if (labResultCounter > 1) {
+        const removeBtn = labResultDiv.querySelector('.btn-danger');
+        removeBtn.addEventListener('click', function() {
+            removeLabResult(labResultCounter);
+        });
+    }
 }
 
 // Remove a lab result
@@ -267,6 +275,14 @@ ${labResultsSection}
 // Utility functions
 function formatDate(dateString) {
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+        // Return today's date if invalid
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}${month}${day}`;
+    }
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -274,6 +290,9 @@ function formatDate(dateString) {
 }
 
 function formatDateTime(date) {
+    if (isNaN(date.getTime())) {
+        date = new Date();
+    }
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
