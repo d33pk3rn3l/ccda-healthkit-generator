@@ -304,11 +304,15 @@ function formatDateTime(date) {
 }
 
 function generateUUID() {
-    // Use crypto.randomUUID() if available (modern browsers), otherwise fallback to Math.random()
+    // Use crypto.randomUUID() if available in secure context, otherwise fallback to Math.random()
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
+        try {
+            return crypto.randomUUID();
+        } catch (e) {
+            // Fall through to Math.random() if not in secure context
+        }
     }
-    // Fallback for older browsers
+    // Fallback for older browsers or non-secure contexts
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0;
         const v = c === 'x' ? r : (r & 0x3 | 0x8);
