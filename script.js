@@ -1,3 +1,6 @@
+// Constants
+const DEFAULT_LOINC_CODE = '2345-7'; // Laboratory studies (set) - default LOINC code for lab panels
+
 // Lab results counter
 let labResultCounter = 0;
 
@@ -121,7 +124,7 @@ function collectFormData() {
         const id = element.id.replace('labResult', '');
         const labResult = {
             name: document.getElementById(`labName${id}`).value,
-            code: document.getElementById(`labCode${id}`).value || '2345-7',
+            code: document.getElementById(`labCode${id}`).value || DEFAULT_LOINC_CODE,
             value: document.getElementById(`labValue${id}`).value,
             unit: document.getElementById(`labUnit${id}`).value || '',
             rangeLow: document.getElementById(`labRangeLow${id}`).value,
@@ -165,7 +168,7 @@ function generateCCDAXML(data) {
                             <organizer classCode="BATTERY" moodCode="EVN">
                                 <templateId root="2.16.840.1.113883.10.20.22.4.1" extension="2015-08-01"/>
                                 <id root="${labId}"/>
-                                <code code="2345-7" codeSystem="2.16.840.1.113883.6.1" 
+                                <code code="${DEFAULT_LOINC_CODE}" codeSystem="2.16.840.1.113883.6.1" 
                                       codeSystemName="LOINC" displayName="Laboratory studies (set)"/>
                                 <statusCode code="completed"/>
                                 <effectiveTime value="${effectiveTime}"/>
@@ -277,12 +280,12 @@ function formatDate(dateString) {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
         // Return today's date if invalid
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        return `${year}${month}${day}`;
+        return formatDateComponents(new Date());
     }
+    return formatDateComponents(date);
+}
+
+function formatDateComponents(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -293,16 +296,19 @@ function formatDateTime(date) {
     if (isNaN(date.getTime())) {
         date = new Date();
     }
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const dateStr = formatDateComponents(date);
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
-    return `${year}${month}${day}${hours}${minutes}${seconds}`;
+    return `${dateStr}${hours}${minutes}${seconds}`;
 }
 
 function generateUUID() {
+    // Use crypto.randomUUID() if available (modern browsers), otherwise fallback to Math.random()
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+    // Fallback for older browsers
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = Math.random() * 16 | 0;
         const v = c === 'x' ? r : (r & 0x3 | 0x8);
