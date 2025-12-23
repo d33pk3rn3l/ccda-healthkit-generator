@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-CDA Lab Results Generator for Apple Health</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>C-CDA Lab Results Generator</h1>
+            <p class="subtitle">Create your own lab results document for Apple Health import</p>
+        </header>
+
+        <main>
+            <form id="ccdaForm">
+                <section class="form-section">
+                    <h2>Patient Information</h2>
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth *</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender *</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select...</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="UN">Undifferentiated</option>
+                        </select>
+                    </div>
+                </section>
+
+                <section class="form-section">
+                    <h2>Lab Results</h2>
+                    <div id="labResultsContainer">
+                        <!-- Lab results will be added here dynamically -->
+                    </div>
+                    <button type="button" id="addLabResultBtn" class="btn btn-secondary">+ Add Lab Result</button>
+                </section>
+
+                <section class="form-section">
+                    <h2>Document Information</h2>
+                    <div class="form-group">
+                        <label for="documentDate">Document Date *</label>
+                        <input type="date" id="documentDate" name="documentDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="performingOrg">Performing Organization</label>
+                        <input type="text" id="performingOrg" name="performingOrg" placeholder="Lab Name">
+                    </div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Generate & Download C-CDA XML</button>
+                </div>
+            </form>
+        </main>
+
+        <footer>
+            <p>Generated documents are compatible with Apple Health import. No data is sent to any server - all processing happens in your browser.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
